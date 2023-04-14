@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Cat
+from .models import Cat, Toy
 from .forms import FeedingForm
 
 # cats = [
@@ -25,8 +25,10 @@ def cats_index(request):
 # Define the detail view
 def cats_detail(request, cat_id):
     cat = Cat.objects.get(id=cat_id)
+    id_list = cat.toys.all().values_list('id')
+    toys_cat_doesnt_have = Toy.objects.exclude(id__in=id_list)
     feeding_form = FeedingForm()
-    return render(request, 'cats/detail.html', {'cat': cat, 'feeding_form': feeding_form})
+    return render(request, 'cats/detail.html', {'cat': cat, 'feeding_form': feeding_form, 'toys': toys_cat_doesnt_have})
 
 def add_feeding(request, cat_id):
   # create a ModelForm instance using the data in request.POST
