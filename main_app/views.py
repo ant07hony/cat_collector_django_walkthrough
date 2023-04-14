@@ -42,10 +42,13 @@ def add_feeding(request, cat_id):
     new_feeding.save()
   return redirect('detail', cat_id=cat_id)
 
+def assoc_toy(request, cat_id, toy_id):
+   Cat.objects.get(id=cat_id).toys.add(toy_id)
+   return redirect('detail', cat_id=cat_id)
 
 class CatCreate(CreateView):
     model = Cat
-    fields = '__all__'
+    fields = ['name', 'breed', 'description', 'age']
     # Special string pattern Django will use
     # success_url = '/cats/{cat_id}' <- what it may look like under hood
     # Or if you wanted to redirect to the index page
